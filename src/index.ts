@@ -52,9 +52,6 @@ async function createChainIndexer(
     contracts[cc.name] = abi;
   }
 
-  console.log(contracts);
-
-  console.log(chainId);
   const indexer = createIndexer({
     chain: {
       id: chainId,
@@ -78,11 +75,22 @@ async function createChainIndexer(
     },
   });
 
+  for (const cc of contractsConfig) {
+    indexer.subscribeToContract({
+      contract: cc.name,
+      address: cc.address,
+    });
+  }
+
   indexer.on("event", async ({ event }) => {
     console.log("Event:", event);
     await createEvent({
+      chain_id: chainId,
+      address: event.address as string,
       name: event.name,
       params: event.params,
+      contract_name: "??",
+      // metadata: { foo: event.params["metadata"] },
     });
   });
 

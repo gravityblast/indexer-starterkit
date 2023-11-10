@@ -1,17 +1,21 @@
 import pg from "pg";
 import { Generated, Kysely, PostgresDialect, Insertable } from "kysely";
 
-export interface Database {
+interface Database {
   events: EventTable;
 }
 
-export interface EventTable {
+interface EventTable {
   id: Generated<number>;
   name: string;
-  params: any;
+  contract_name: string;
+  params: Record<string, unknown> | readonly unknown[];
+  chain_id: number;
+  address: string;
+  metadata: unknown;
 }
 
-export type Event = Insertable<EventTable>;
+type Event = Insertable<EventTable>;
 
 const dialect = new PostgresDialect({
   pool: new pg.Pool({
@@ -24,7 +28,7 @@ const dialect = new PostgresDialect({
   }),
 });
 
-export const db = new Kysely<Database>({
+const db = new Kysely<Database>({
   dialect,
 });
 
