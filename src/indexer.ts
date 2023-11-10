@@ -53,6 +53,11 @@ export async function createChainIndexer(
     indexer.subscribeToContract({
       contract: cc.name,
       address: cc.address,
+      // TODO
+      // context: {
+      //  contractName: cc.name,
+      //  metadataPointerExtractFunc: cc...
+      // }
     });
   }
 
@@ -64,7 +69,8 @@ export async function createChainIndexer(
       name: event.name,
       params: event.params,
       contract_name: "??",
-      // metadata: { foo: event.params["metadata"] },
+      // TODO
+      // metadata: event.context.metadataPointerExtractFunc(event.params)
     });
   });
 
